@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Add Skill{% endblock %}
+
+{% block content %}
+<h2>Add Skill</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <input class="form-control mb-2" name="name" placeholder="Skill name">
+    <input class="form-control mb-2" name="level" placeholder="Beginner / Intermediate / Expert">
+    <textarea class="form-control mb-2" name="description" placeholder="Description"></textarea>
+    <button class="btn btn-primary">Add Skill</button>
+</form>
+{% endblock %}
