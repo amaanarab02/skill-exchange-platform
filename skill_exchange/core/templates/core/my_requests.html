@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}My Requests{% endblock %}
+
+{% block content %}
+<h2>Received Requests</h2>
+
+{% for r in received %}
+<div class="card mb-2">
+    <div class="card-body">
+        <b>{{ r.sender.username }}</b> wants to learn <b>{{ r.skill.name }}</b>
+        <br>Status: {{ r.status }}
+
+        {% if r.status == "Pending" %}
+        <div class="mt-2">
+            <a href="{% url 'update_request' r.id 'accept' %}" class="btn btn-success btn-sm">Accept</a>
+            <a href="{% url 'update_request' r.id 'reject' %}" class="btn btn-danger btn-sm">Reject</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<p>No requests.</p>
+{% endfor %}
+
+<hr>
+
+<h2>Sent Requests</h2>
+{% for r in sent %}
+<p>{{ r.skill.name }} → {{ r.receiver.username }} ({{ r.status }})</p>
+{% empty %}
+<p>No sent requests.</p>
+{% endfor %}
+{% endblock %}

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}Skills{% endblock %}
 
 {% block content %}
@@ -17,25 +18,6 @@
                 Request Exchange
             </a>
         {% endif %}
-    </div>
-</div>
-{% empty %}
-<p>No skills available.</p>
-{% endfor %}
-
-{% endblock %}
-{% extends "base.html" %}
-{% block title %}Skills{% endblock %}
-
-{% block content %}
-<h2>Available Skills</h2>
-
-{% for skill in skills %}
-<div class="card mb-3">
-    <div class="card-body">
-        <h5>{{ skill.name }} ({{ skill.level }})</h5>
-        <p>{{ skill.description }}</p>
-        <small>By {{ skill.user.username }}</small>
     </div>
 </div>
 {% empty %}

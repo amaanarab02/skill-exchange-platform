@@ -58,3 +58,52 @@ def send_request(request, skill_id):
     )
     return redirect('skill_list')
 
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from .models import ExchangeRequest
+
+@login_required
+def my_requests(request):
+    received = ExchangeRequest.objects.filter(receiver=request.user)
+    sent = ExchangeRequest.objects.filter(sender=request.user)
+    return render(request, 'core/my_requests.html', {
+        'received': received,
+        'sent': sent
+    })
+
+@login_required
+def update_request(request, req_id, action):
+    req = get_object_or_404(ExchangeRequest, id=req_id, receiver=request.user)
+
+    if action == 'accept':
+        req.status = 'Accepted'
+    elif action == 'reject':
+        req.status = 'Rejected'
+
+    req.save()
+    return redirect('my_requests')
+
+from .models import Message
+
+@login_required
+def chat(request, username):
+    other = get_object_or_404(User, username=username)
+    messages = Message.objects.filter(
+        sender__in=[request.user, other],
+        receiver__in=[request.user, other]
+    ).order_by('timestamp')
+
+    if request.method == 'POST':
+        Message.objects.create(
+            sender=request.user,
+            receiver=other,
+            text=request.POST['text']
+        )
+        return redirect('chat', username=other.username)
+
+    return render(request, 'core/chat.html', {
+        'messages': messages,
+        'other': other
+    })
+
